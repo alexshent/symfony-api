@@ -13,16 +13,15 @@ readonly class UserReadCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $id
     ) {
     }
 
     public function execute(): void
     {
-        $id = $this->client->getLastId();
-
         try {
             $response = $this->client->getRequest()
-                ->get("/api/users/{$id}")
+                ->get("/api/users/$this->id")
                 ->call();
             $status = $response->getStatus();
             if (200 === $status) {

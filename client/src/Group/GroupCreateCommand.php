@@ -13,17 +13,16 @@ readonly class GroupCreateCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private string $name,
     ) {
     }
 
     public function execute(): void
     {
         try {
-            $uniqueId = uniqid();
-
             $response = $this->client->getRequest()
                 ->post('/api/groups', [
-                    'name' => "New group $uniqueId",
+                    'name' => $this->name,
                 ])
                 ->call()
             ;

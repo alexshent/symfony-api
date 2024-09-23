@@ -13,20 +13,19 @@ readonly class GroupUpdateCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $id,
+        private string $name,
     ) {
     }
 
     public function execute(): void
     {
-        $id = $this->client->getLastId();
-
         try {
             $response = $this->client->getRequest()
-                ->put("/api/groups/{$id}", [
-                    'name' => 'Updated group name',
+                ->put("/api/groups/$this->id", [
+                    'name' => $this->name,
                 ])
-                ->call()
-            ;
+                ->call();
 
             $status = $response->getStatus();
             if (200 === $status) {

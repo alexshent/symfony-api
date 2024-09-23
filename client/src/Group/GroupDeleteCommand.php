@@ -13,6 +13,7 @@ readonly class GroupDeleteCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $id,
     ) {
     }
 
@@ -22,9 +23,8 @@ readonly class GroupDeleteCommand implements Command
 
         try {
             $response = $this->client->getRequest()
-                ->delete('/api/groups/'.$id)
-                ->call()
-            ;
+                ->delete("/api/groups/$this->id")
+                ->call();
 
             $status = $response->getStatus();
             if (200 === $status) {

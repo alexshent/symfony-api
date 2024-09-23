@@ -13,16 +13,18 @@ readonly class AddUserToGroupCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $userId,
+        private int $groupId,
     ) {
     }
 
     public function execute(): void
     {
-        $groupId = 5;
-        $userId = 1;
-
         try {
-            $response = $this->client->getRequest()->patch("/api/group/{$groupId}/user/{$userId}")->call();
+            $response = $this->client->getRequest()
+                ->patch("/api/group/$this->groupId/user/$this->userId")
+                ->call();
+
             $status = $response->getStatus();
             if (200 === $status) {
                 $body = $response->getBody();

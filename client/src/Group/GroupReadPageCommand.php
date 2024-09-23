@@ -12,20 +12,19 @@ use Piggly\ApiClient\Exceptions\ApiResponseException;
 readonly class GroupReadPageCommand implements Command
 {
     public function __construct(
-        private readonly Client $client,
+        private Client $client,
+        private int $page,
+        private int $itemsPerPage,
     ) {
     }
 
     public function execute(): void
     {
-        $page = 1;
-        $itemsPerPage = 10;
-
         try {
             $response = $this->client->getRequest()
-                ->get("/api/groups/page/{$page}/{$itemsPerPage}")
-                ->call()
-            ;
+                ->get("/api/groups/page/$this->page/$this->itemsPerPage")
+                ->call();
+
             $status = $response->getStatus();
             if (200 === $status) {
                 $body = $response->getBody();

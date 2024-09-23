@@ -22,6 +22,7 @@ readonly class GroupsUsersCommand implements Command
             $response = $this->client->getRequest()
                 ->get('/api/groups/users')
                 ->call();
+
             $status = $response->getStatus();
             if (200 === $status) {
                 $body = $response->getBody();

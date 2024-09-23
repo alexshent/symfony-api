@@ -13,17 +13,16 @@ readonly class UserReadPageCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $page,
+        private int $itemsPerPage
     ) {
     }
 
     public function execute(): void
     {
-        $page = 1;
-        $itemsPerPage = 10;
-
         try {
             $response = $this->client->getRequest()
-                ->get("/api/users/page/{$page}/{$itemsPerPage}")
+                ->get("/api/users/page/$this->page/$this->itemsPerPage")
                 ->call()
             ;
             $status = $response->getStatus();

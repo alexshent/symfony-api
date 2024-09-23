@@ -1,0 +1,23 @@
+{
+    "name": "alexshent/api-client",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Alexshent\\ApiClient\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexey Shentyakov",
+            "email": "alexey.shentyakov@gmail.com"
+        }
+    ],
+    "require": {
+        "piggly/php-api-client": "^2.2",
+        "ext-readline": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.12",
+        "friendsofphp/php-cs-fixer": "^3.64"
+    }
+}

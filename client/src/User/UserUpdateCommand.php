@@ -12,21 +12,26 @@ use Piggly\ApiClient\Exceptions\ApiResponseException;
 readonly class UserUpdateCommand implements Command
 {
     public function __construct(
-        private Client $client,
+        private Client  $client,
+        private int     $id,
+        private ?string  $username = null,
+        private ?string $email = null,
     ) {
     }
 
     public function execute(): void
     {
-        $id = $this->client->getLastId();
-        $uniqueId = uniqid();
+        $body = [];
+        if (null != $this->username) {
+            $body['username'] = $this->username;
+        }
+        if (null != $this->email) {
+            $body['email'] = $this->email;
+        }
 
         try {
             $response = $this->client->getRequest()
-                ->put("/api/users/{$id}", [
-                    'username' => "New username{$uniqueId}",
-                    'email' => "user{$uniqueId}@example.com",
-                ])
+                ->put("/api/users/$this->id", $body)
                 ->call();
 
             $status = $response->getStatus();

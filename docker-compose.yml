@@ -1,0 +1,60 @@
+services:
+
+  server-php-apache:
+    build:
+      context: .
+      dockerfile: docker/server-php-apache/Dockerfile
+    container_name: symf-api-server
+    depends_on:
+      - database-mysql
+    ports:
+    - mode: ingress
+      target: 80
+      published: "80"
+      protocol: tcp
+    restart: always
+
+# ---------------------------------------------------------------------
+
+  client-php-cli:
+    build:
+      context: .
+      dockerfile: docker/client-php-cli/Dockerfile
+    container_name: symf-api-client
+    depends_on:
+      - server-php-apache
+    tty: true
+    stdin_open: true
+
+# ---------------------------------------------------------------------
+
+  database-mysql:
+    container_name: symf-api-db
+    environment:
+    - MYSQL_ROOT_PASSWORD=1
+    - MYSQL_DATABASE=apidb
+    - MYSQL_USER=dbuser
+    - MYSQL_PASSWORD=1
+    image: mysql:9.0
+    ports:
+    - mode: ingress
+      target: 3306
+      published: "3306"
+      protocol: tcp
+    restart: always
+
+# ---------------------------------------------------------------------
+
+  db-admin-phpmyadmin:
+    container_name: symf-api-phpmyadmin
+    depends_on:
+      - database-mysql
+    environment:
+    - PMA_HOST=database-mysql
+    - MYSQL_ROOT_PASSWORD=1
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+    - mode: ingress
+      target: 80
+      published: "81"
+      protocol: tcp

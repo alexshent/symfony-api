@@ -13,16 +13,15 @@ readonly class GroupReadCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private int $id,
     ) {
     }
 
     public function execute(): void
     {
-        $id = $this->client->getLastId();
-
         try {
             $response = $this->client->getRequest()
-                ->get("/api/groups/{$id}")
+                ->get("/api/groups/$this->id")
                 ->call();
             $status = $response->getStatus();
             if (200 === $status) {

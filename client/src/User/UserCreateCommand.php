@@ -13,22 +13,22 @@ readonly class UserCreateCommand implements Command
 {
     public function __construct(
         private Client $client,
+        private string  $username,
+        private string $email,
+        private string $password,
     ) {
     }
 
     public function execute(): void
     {
         try {
-            $uniqueId = uniqid();
-
             $response = $this->client->getRequest()
                 ->post('/api/users', [
-                    'username' => "New user $uniqueId",
-                    'password' => '1',
-                    'email' => "user$uniqueId@example.com",
+                    'username' => $this->username,
+                    'email' => $this->email,
+                    'password' => $this->password,
                 ])
-                ->call()
-            ;
+                ->call();
 
             $status = $response->getStatus();
             if (200 === $status) {
